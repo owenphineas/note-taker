@@ -5,23 +5,26 @@ const fs = require('fs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static('public'));
+
 // GET /notes returns notes.html
 app.get('/notes', function(req, res) {
-    res.sendFile(path.join(__dirname, './public/notes.html'))
+    res.sendFile(path.join(__dirname, '/public/notes.html'))
 });
   
 // GET * returns index.html
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, './public/index.html'))
+    res.sendFile(path.join(__dirname, '/public/index.html'))
 });
 
 // GET /api/notes reads db.json and returns saved notes as JSON
 app.get('/api/notes', function(req, res) {
-  fs.readFile('./db/db.json', function(err, data) {
+  fs.readFile('./db/db.json', function(err, notes) {
+    const noteData = JSON.parse(notes);
     if(err) {
       console.err(err)
     } else {
-      res.json(data)
+      res.json(noteData)
     }
   })
 });
